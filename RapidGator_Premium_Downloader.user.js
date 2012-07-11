@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        RapidGator Premium Downloader
-// @namespace   mikey_rapidgator
+// @namespace   https://github.com/ohec/RapidGator-Premium-Downloader
 // @description Downloads from RapidGator account
 // @include     http://rapidgator.net/file/*
 // @include     http://www.rapidgator.net/file/*
