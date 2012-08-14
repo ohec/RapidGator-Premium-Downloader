@@ -9,67 +9,84 @@
 // @include     */fhn.html
 // @include     */s.html
 // ==/UserScript==
-
 var $;
 
-// Add jQuery
-(function(){
-	if (typeof unsafeWindow.jQuery == 'undefined') {
-		console.log('Load jQuery');
-		loadJS('http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js');
-	}
-	GM_wait();
-})();
+var gm_plugin = function () {
+	var options = {
+		debug: 1,
+		openLink: 0, // Open by clicking the link
+		openUrl: 0 // Open by setting the window href
+	};
 
+	return {
+		/**
+		 * Init the script.
+		 */
+		init: function () {
+			this.log('gm_plugin.init');
+			if (typeof unsafeWindow.jQuery == 'undefined') {
+				this.log('gm_plugin.gm_wait.undefined');
+				unsafeWindow.setTimeout(this.init, 100);
+			} else {
+				this.log('gm_plugin.gm_wait.defined');
+				$ = unsafeWindow.jQuery.noConflict(true);
+				this.run();
+			}
+		},
+		run: function () {
+			this.log('gm_plugin.letsJQuery');
+			/*var i, x;
+			 for (i = 0; x = document.styleSheets[i]; ++i) {
+			 x.disabled = true;
+			 }*/
 
-function loadJS(src){
-	var GM_Head = document.getElementsByTagName('head')[0] || document.documentElement,
-		GM_JQ = document.createElement('script');
-	GM_JQ.src = src;
-	GM_JQ.type = 'text/javascript';
-	GM_JQ.async = true;
-	GM_Head.insertBefore(GM_JQ, GM_Head.firstChild);
+			if(document.title == "File not found") {
+				this.log('File not found - Closing');
+				unsafeWindow.close();
+			} else {
+				var link = $('.btm > p > a');
+				var url = $.trim(link.attr('href'));
+
+				//$('body').html('<pre style="margin-left:30px;margin-top:20px;">Downloading ' + $.trim(link.html()) + '...</pre>');
+				if(options.openUrl == 1) {
+					unsafeWindow.location.href = url;
+				} else if(options.openLink == 1) {
+					link.click();
+				} else {
+					this.log('Opening ' + url);
+				}
+			}
+
+			//setTimeout(function() { window.close(); }, 10000);
+		},
+
+		loadJS: function (src) {
+			this.log('gm_plugin.loadJS');
+			var GM_JQ = document.createElement('script');
+			GM_JQ.type = 'text/javascript';
+			GM_JQ.async = true;
+			GM_JQ.src = src;
+
+			var GM_Head = document.getElementsByTagName('head')[0] || document.documentElement;
+			GM_Head.parentNode.insertBefore(GM_JQ, GM_Head.firstChild);
+		},
+
+		log: function (message) {
+			if(options.debug > 0) {
+				console.log(message);
+			}
+		}
+	};
 }
 
 
-
-
-/**
- * Check if jQuery's loaded
- */
-function GM_wait() {
-	if (typeof unsafeWindow.jQuery == 'undefined') {
-		console.log('undefined');
-		unsafeWindow.setTimeout(GM_wait, 100);
-	} else {
-		console.log('defined');
-		$ = unsafeWindow.jQuery.noConflict(true);
-		letsJQuery();
-	}
+var gm = new gm_plugin();
+if (typeof unsafeWindow.jQuery == 'undefined') {
+	console.log('Load jQuery');
+	//http://code.jquery.com/jquery-1.7.2.js
+	gm.loadJS('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
 }
+gm.init();
 
-/**
- *
- */
-function letsJQuery() {
-	/*var i, x;
-	for (i = 0; x = document.styleSheets[i]; ++i) {
-		x.disabled = true;
-	}*/
-
-	if(document.title == "File not found") {
-		console.log('File not found - Closing');
-		unsafeWindow.close();
-	} else {
-		var link = $('.btm > p > a');
-		var url = $.trim(link.attr('href'));
-
-		//$('body').html('<pre style="margin-left:30px;margin-top:20px;">Downloading ' + $.trim(link.html()) + '...</pre>');
-		unsafeWindow.location.href = url;
-
-		// Window location seems better.
-		// link.click();
-	}
-
-	//setTimeout(function() { window.close(); }, 10000);
-}
+/*(function(){
+})();*/
