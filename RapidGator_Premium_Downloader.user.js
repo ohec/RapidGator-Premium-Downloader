@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name        RapidGator Premium Downloader
-// @namespace   https://github.com/ohec/RapidGator-Premium-Downloader
+// @version     0.2
 // @description Downloads from RapidGator account
+// @namespace   https://github.com/ohec/RapidGator-Premium-Downloader
 // @downloadURL https://github.com/ohec/RapidGator-Premium-Downloader/raw/master/RapidGator_Premium_Downloader.user.js
 // @include     http://rapidgator.net/file/*
 // @include     http://www.rapidgator.net/file/*
 // @include     */fhn.html
 // @include     */s.html
-// @version     0.2
 // ==/UserScript==
 
 var $;
@@ -16,21 +16,26 @@ var $;
 (function(){
 	if (typeof unsafeWindow.jQuery == 'undefined') {
 		console.log('Load jQuery');
-		var GM_Head = document.getElementsByTagName('head')[0] || document.documentElement,
-			GM_JQ = document.createElement('script');
-
-		GM_JQ.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js';
-		GM_JQ.type = 'text/javascript';
-		GM_JQ.async = true;
-
-		GM_Head.insertBefore(GM_JQ, GM_Head.firstChild);
+		loadJS('http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js');
 	}
 	GM_wait();
 })();
 
+
+function loadJS(src){
+	var GM_Head = document.getElementsByTagName('head')[0] || document.documentElement,
+		GM_JQ = document.createElement('script');
+	GM_JQ.src = src;
+	GM_JQ.type = 'text/javascript';
+	GM_JQ.async = true;
+	GM_Head.insertBefore(GM_JQ, GM_Head.firstChild);
+}
+
+
+
+
 /**
  * Check if jQuery's loaded
- * @constructor
  */
 function GM_wait() {
 	if (typeof unsafeWindow.jQuery == 'undefined') {
