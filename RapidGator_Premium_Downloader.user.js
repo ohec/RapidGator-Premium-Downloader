@@ -2,17 +2,20 @@
 // @name        RapidGator Premium Downloader
 // @namespace   https://github.com/ohec/RapidGator-Premium-Downloader
 // @description Downloads from RapidGator account
-// @require       http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js
 // @downloadURL https://github.com/ohec/RapidGator-Premium-Downloader/raw/master/RapidGator_Premium_Downloader.user.js
 // @include     http://rapidgator.net/file/*
 // @include     http://www.rapidgator.net/file/*
 // @include     */fhn.html
 // @include     */s.html
-// @version     0.1
+// @version     0.2
 // ==/UserScript==
+
+var $;
+
 // Add jQuery
 (function(){
-	if (typeof jQuery == 'undefined') {
+	if (typeof unsafeWindow.jQuery == 'undefined') {
+		console.log('Load jQuery');
 		var GM_Head = document.getElementsByTagName('head')[0] || document.documentElement,
 			GM_JQ = document.createElement('script');
 
@@ -25,35 +28,43 @@
 	GM_wait();
 })();
 
-// Check if jQuery's loaded
+/**
+ * Check if jQuery's loaded
+ * @constructor
+ */
 function GM_wait() {
-	if (typeof jQuery == 'undefined') {
+	if (typeof unsafeWindow.jQuery == 'undefined') {
 		console.log('undefined');
-		window.setTimeout(GM_wait, 100);
+		unsafeWindow.setTimeout(GM_wait, 100);
 	} else {
 		console.log('defined');
-		$ = jQuery.noConflict(true);
+		$ = unsafeWindow.jQuery.noConflict(true);
 		letsJQuery();
 	}
 }
 
-// The Code
+/**
+ *
+ */
 function letsJQuery() {
-	var i, x;
+	/*var i, x;
 	for (i = 0; x = document.styleSheets[i]; ++i) {
 		x.disabled = true;
-	}
+	}*/
+
 	if(document.title == "File not found") {
 		console.log('File not found - Closing');
+		unsafeWindow.close();
 	} else {
-		var link2 = $('.btm > p > a');
-		var url = $.trim(link2.attr('href'));
+		var link = $('.btm > p > a');
+		var url = $.trim(link.attr('href'));
 
-		$('body').html('<pre style="margin-left:30px;margin-top:20px;">Downloading "' + $(document).attr('title') + '" ...</pre>');
+		//$('body').html('<pre style="margin-left:30px;margin-top:20px;">Downloading ' + $.trim(link.html()) + '...</pre>');
+		unsafeWindow.location.href = url;
 
-		link2.click();
-		//window.location.href = url;
+		// Window location seems better.
+		// link.click();
 	}
 
-	setTimeout(function() { window.close(); }, 10000);
+	//setTimeout(function() { window.close(); }, 10000);
 }
