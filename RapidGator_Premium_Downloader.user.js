@@ -7,7 +7,6 @@
 // @include     http://rapidgator.net/file/*
 // @include     http://www.rapidgator.net/file/*
 // ==/UserScript==
-var unsaveWindow = window;
 (function () {
 	var gm_plugin = function () {
 		var options = {
