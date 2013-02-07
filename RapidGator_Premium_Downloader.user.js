@@ -18,6 +18,8 @@ var $;
 			openUrl: 1 // Open by setting the window href
 		};
 
+
+
 		return {
 			/**
 			 * Init the script.
