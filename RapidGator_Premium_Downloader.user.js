@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        RapidGator Premium Downloader
-// @version     0.3
+// @version     0.4
 // @description Downloads from RapidGator account
 // @namespace   https://github.com/ohec/RapidGator-Premium-Downloader
 // @downloadURL https://github.com/ohec/RapidGator-Premium-Downloader/raw/master/RapidGator_Premium_Downloader.user.js
@@ -24,6 +24,8 @@
                     this.log('File not found - Closing');
                     unsafeWindow.close();
                 } else {
+                    // @TODO: Add premium checker
+                    // //a[@href="/auth/logout"]
                     var downloadLinks;
                     downloadLinks = document.evaluate('//div[@class="btm"]/p/a', document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
                     for (var i = 0; i < downloadLinks.snapshotLength; i++) {
@@ -37,8 +39,8 @@
                         } else {
                             this.log('Opening ' + url);
                         }
-                        //unsafeWindow.location.href = link.href;
-                        //link.click();
+                        // unsafeWindow.location.href = link.href;
+                        // link.click();
                     }
                 }
             },
