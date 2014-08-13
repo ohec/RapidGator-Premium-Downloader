@@ -18,6 +18,8 @@
         return {
             /**
              * Do the click
+             *
+             * @return void
              */
             init: function () {
                 if (document.title == 'File not found') {
